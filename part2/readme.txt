@@ -1,6 +1,6 @@
 INTRODUCTION
 ------------
-This is an implementation of Advanced Topology section based on OpenFlow tutorial
+This is an implementation of switch router based on OpenFlow tutorial
 
 We use dpid as switch identification to support multi-switch controller, separating route table, arp table, mac table according to dpid. Each switch has its own tables.
 
