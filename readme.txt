@@ -1,43 +1,23 @@
 INTRODUCTION
 ------------
 
-This project is a simple implementation of Go-Back-N protocol. The sender 
-send a string user input to receiver using UDP packet to simulate the frames
-of Go-Back-N. 
+This project is an implementation based on OpenFlow tutorial at https://github.com/mininet/openflow-tutorial/wiki
 
-Before sending data, The sender sends SYN packet to request connection. After
-connection establised, the sender continues to send a number of frames 
-without receiving ACK. The receiver will send ACK back for every packet 
-received. After finishing sending, the sender send FIN packet to close the 
-connection. 
-
-
-The packet is defined as:
-typedef struct packet {
-	uint8_t flg;
-	uint32_t seq;
-	uint32_t crc32;
-	char data[1];
-} packet_t;
-
-
- * The project is located at:
-   https://github.com/uscwy/ee450project2
-   
-   sender.cpp    Implementation of sender
-   receiver.cpp  Implementation of receiver
-   plot.pdf      Report document
-   test.sh       Test script
+   openflow-tutorial-report.pdf    Project report document
+   part1                           Router Exercise section
+   part2                           Advanced Topology section
+   part3                           Create Firewall section
 
 
 REQUIREMENTS
 ------------
 
-This project need Mininet to simulate network latency and packet loss.
+Please install all related tools (VM, mininet, ...) according to OpenFlow tutorial
 
 
-MAINTAINER
+HOW TO RUN
 ------------
+See readme in each directory
 
-Yong Wang <yongw@usc.edu>
+
 
