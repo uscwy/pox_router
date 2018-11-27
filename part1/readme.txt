@@ -1,6 +1,6 @@
 INTRODUCTION
 ------------
-This is an implementation of router controller in OpenFlow tutorial
+This is an implementation of router controller based on OpenFlow tutorial
 
 Change with_flow_mod to 0 in router.py if you don't need flow mod
 
