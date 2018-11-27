@@ -23,6 +23,7 @@ class MyRouter (object):
     self.arp_queue={}
     self.fakeways={}
     self.mac={}
+    self.with_flow_mod=1
   def _handle_ConnectionDown(self,event):
     dpid=event.dpid
     log.debug("switch %s has been closed", str(dpid))
@@ -188,16 +189,18 @@ class MyRouter (object):
     self.ip_to_port[dpid][sip]=packet_in.in_port
     out_port=packet_in.in_port
 
-    msg = of.ofp_flow_mod()
-    msg.match = of.ofp_match(dl_type=pkt.ethernet.IP_TYPE, nw_dst=sip)
-    #msg.idle_timeout = 120
-    msg.actions.append(of.ofp_action_dl_addr.set_dst(a.hwsrc))
-    msg.actions.append(of.ofp_action_dl_addr.set_src(self.mac[dpid]))
-    msg.actions.append(of.ofp_action_output(port=out_port))
-    self.connection[dpid].send(msg)
-    log.debug("recv arp from (%s, %s)", sip, smac)
-    log.debug("add flow entry (ip=%s) port %d", sip, out_port)    
+    if self.with_flow_mod == 1:
+      msg = of.ofp_flow_mod()
+      msg.match = of.ofp_match(dl_type=pkt.ethernet.IP_TYPE, nw_dst=sip)
+      #msg.idle_timeout = 120
+      msg.actions.append(of.ofp_action_dl_addr.set_dst(a.hwsrc))
+      msg.actions.append(of.ofp_action_dl_addr.set_src(self.mac[dpid]))
+      msg.actions.append(of.ofp_action_output(port=out_port))
+      self.connection[dpid].send(msg)
+      log.debug("add flow entry (ip=%s) port %d", sip, out_port)    
     self.send_arp_queue(dpid, sip)
+
+    log.debug("recv arp from (%s, %s)", sip, smac)
     if a.opcode == a.REPLY:
       return
 
@@ -278,11 +281,21 @@ class MyRouter (object):
     icmp=packet.find('icmp')
     if ip and (str(ip.dstip) not in self.fakeways[dpid]):
       dstip = str(ip.dstip)
-      if self.find_route(dstip, dpid) == None:
+      rte = self.find_route(dstip,dpid)
+      if rte == None:
         return self.send_unreachable(event)
-      else:
+      elif dstip not in self.arp_table[dpid]:
         self.add_arp_queue(dstip, dpid, packet_in)
         return self.send_arp_req(packet,  dpid)
+      else: 
+        nextmac=self.arp_table[dpid][dstip]
+        out=rte[4]
+        msg = of.ofp_packet_out()
+        msg.data = packet_in
+        msg.actions.append(of.ofp_action_dl_addr.set_dst(nextmac))
+        msg.actions.append(of.ofp_action_output(port = out))
+        self.connection[dpid].send(msg)
+        return
 
     if icmp: return self.handle_icmp(event)
 
