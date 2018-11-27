@@ -2,6 +2,8 @@ INTRODUCTION
 ------------
 This is an implementation of router controller in OpenFlow tutorial
 
+Change with_flow_mod to 0 in router.py if you don't need flow mod
+
 IP packets process:
 If dst_ip is router, pass it to icmp handler.
 If dst ip is not router, need to check arp table and route table.
