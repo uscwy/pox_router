@@ -1,6 +1,6 @@
 INTRODUCTION
 ------------
-This is an implementation of Create Firewall section based on OpenFlow tutorial
+This is an implementation of firewall based on OpenFlow tutorial
 
 We use OFP_DEFAULT_PRIORITY + 100 to set firewall rules, which is the highest priority in the flow table. Each incoming packet will first try to match this firewall rule. It would be dropped if matched, otherwise go to next rule.
 
