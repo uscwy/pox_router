@@ -17,7 +17,7 @@ Please install all related tools (VM, mininet, ...) according to OpenFlow tutori
 
 HOW TO RUN
 ------------
-See readme in each directory
+See readme in each subdirectory
 
 
 
