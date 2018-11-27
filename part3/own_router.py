@@ -91,7 +91,6 @@ class MyRouter (object):
       self.add_ip_flow("10.0.2.0/24", self.mac[2], 4, dpid)
       self.add_ip_flow("10.0.3.0/24", self.mac[2], 4, dpid)
 
-    self.fw_block_tcp_web("10.0.1.2","10.0.4.4",1) 
 #    self.set_switch_mac(dpid)
     
   def set_switch_mac(self, dpid):
